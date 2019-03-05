@@ -8,12 +8,24 @@ original app: https://github.com/Well5a/vertsys-todolist
 * updated to latest Spring Boot release (currently 2.1.3)
 * changed server port to 5555
 
-## Build the app:
+## Build the app
 ```
 mvn clean package
 ```
 
-## App usage (mappings):
+## App usage (mappings)
 * http://localhost:5555/ui for list of todos
 * `curl -X POST localhost:5555/task` to add a task to the list
 * `curl -X DELETE localhost:5555/id` to delete a task from the list
+
+
+## PosgreSQL Docker Container
+Create the container with name todo-postgres that runs on standard port 5432: 
+```
+sudo docker run --name todo-postgres -e POSTGRES_PASSWORD=todo -p 5432:5432 -d postgres
+```
+Access the database within the container:
+```
+sudo docker exec -it todo-postgres bash
+psql -U postgres
+```
