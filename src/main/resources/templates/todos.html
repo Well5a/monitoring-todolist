@@ -1,0 +1,124 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Todos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    </head>
+    <style>
+        body {
+            margin: 0;
+            font-family:Arial, Helvetica, sans-serif;
+            color: #454545;
+        }
+        #main {
+            max-width: 40rem;
+            position: relative;
+            margin: auto;
+        }
+        .table-wrapper {
+            width: 100%;
+            border: 1px solid grey;
+            border-radius: 0.5rem;
+            overflow: hidden;
+
+        }
+        .table-wrapper > table {
+            width: 100%;
+            font-size: 1.2rem;
+            border-collapse: collapse;
+        }
+        .table-wrapper > table thead {
+            background-color:rgb(81, 162, 196);
+            height: 2.6rem;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        .table-wrapper > table td {
+            padding: 0.2rem 1rem;
+        }
+        .table-wrapper > table tbody td:last-child {
+            width: 4rem;
+        }
+        .table-wrapper > table tbody > tr {
+            border-width: 1px 0px;
+            border-style: solid; 
+            border-color:grey;
+        }
+        .table-wrapper > table tbody > tr:last-child {
+            border: none;
+        }
+        button {
+            border: none;
+            background-color: limegreen;
+            border-radius: 0.4rem;
+            color: white;
+            float: right;
+        }
+        button:hover {
+            box-shadow: 0 0.4rem 0.8rem 0 lightgrey;
+        }
+        input[type=text] {
+            width: 100%;
+            background-color: #eee;
+            border: none;
+        }
+    </style>
+    <script th:inline="javascript">
+	/*<![CDATA[*/
+        var makeDeleteHandler = function(id) {
+	    return function(e) {
+                e.stopPropagation();
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200)
+                        location.reload(true);
+                };
+	        req.open("DELETE", "/" + encodeURI(id));
+                req.send();
+            };
+        };
+        
+        var addTodo = function() {
+            var itemname = document.getElementById("todoinput").value;
+            if (itemname == null || itemname == "") 
+                return;
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200)
+                    location.reload(true);
+            };
+	    req.open("POST", "/" + encodeURI(itemname));
+            req.send();
+        }
+        /*]]>*/
+    </script>
+    <body>
+        <div id="main">
+            <h1>Your Todo List</h1>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Todo</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="todo: ${todos}">
+                            <td th:text="${todo.name}"/>
+                            <td th:text="${todo.id}"/>
+                            <td><button th:onclick="'makeDeleteHandler(' + ${todo.id} + ')(event)'">Done</button></td>
+                        </tr>
+                        <tr>
+                            <td><input id="todoinput" type="text" name="todo" maxlength="50"></input></td>
+                            <td></td>
+                            <td><button onclick="addTodo()">Add</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
