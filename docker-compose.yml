@@ -1,0 +1,23 @@
+version: '3'
+services:
+  database:
+    image: postgres
+    container_name: todo-db
+    environment:
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+      POSTGRES_DB: tododb
+    ports:
+     - 5432:5432
+
+  webserver:
+    image: todolist
+    container_name: todo-app
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://todo-db:5432/tododb
+      SPRING_DATASOURCE_USERNAME: todo
+      SPRING_DATASOURCE_PASSWORD: todo
+    ports:
+     - 5555:5555
