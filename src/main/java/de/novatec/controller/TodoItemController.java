@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.novatec.model.TodoItem;
 import de.novatec.repository.TodoItemRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 
@@ -28,7 +29,7 @@ public class TodoItemController
 	@PostMapping("/{todo}")
 	String addTodo(@PathVariable String todo)
 	{
-		repo.save(new TodoItem(todo, false));
+		repo.save(new TodoItem(todo, false, new Date()));
 		return "added "+todo+" to todo list";
 	}
 	

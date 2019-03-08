@@ -29,6 +29,6 @@ mvn clean package
 * Grafana: http://localhost:3000
 * Grafana login: user=admin password=todo
 
-### Add datasources
+### Add datasources in Grafana
 * For Prometheus just specify the above address
 * PostgreSQL: host=todo-db:5432 database=tododb user=todo password=todo ssl=disable
