@@ -8,7 +8,11 @@ services:
       POSTGRES_PASSWORD: todo
       POSTGRES_DB: tododb
     ports:
-     - 5432:5432
+      - 5432:5432
+    networks:
+      monitoring:
+          aliases:
+            - todo-db
 
   webserver:
     image: todolist
@@ -20,4 +24,37 @@ services:
       SPRING_DATASOURCE_USERNAME: todo
       SPRING_DATASOURCE_PASSWORD: todo
     ports:
-     - 5555:5555
+      - 5555:5555
+    networks:
+      monitoring:
+        aliases:
+          - todo-app
+
+  prometheus:
+    image: prom/prometheus:v2.6.1
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      #- ./prometheus:/prometheus
+    ports:
+      - 9090:9090
+    networks:
+      monitoring:
+        aliases:
+          - prometheus
+
+  grafana:
+    image: grafana/grafana:5.4.3
+    #volumes:
+      #- ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=todo
+    ports:
+      - 3000:3000
+    networks:
+      monitoring:
+        aliases:
+          - grafana
+
+networks:
+  monitoring:
