@@ -30,5 +30,7 @@ mvn clean package
 * Grafana login: user=admin password=todo
 
 ### Add datasources in Grafana
+Dashboards and datasources are added and updated automatically through config files in the folder "grafana>provisioning".
+If you need to add datasources manually these are the necessary credentials:
 * Prometheus: URL=http://prometheus:9090
 * PostgreSQL: host=todo-db:5432 database=tododb user=todo password=todo ssl=disable
