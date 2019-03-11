@@ -1,5 +1,6 @@
 package de.novatec.controller;
 
+import io.micrometer.core.instrument.Meter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import de.novatec.repository.TodoItemRepository;
 
 import java.util.Date;
 import java.util.Optional;
+
+import io.micrometer.core.instrument.MeterRegistry;
 
 
 @RestController
