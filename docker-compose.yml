@@ -14,6 +14,18 @@ services:
           aliases:
             - todo-db
 
+  database-exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: todo-db-exporter
+    environment:
+      DATA_SOURCE_NAME: postgresql://todo:todo@todo-db:5432/tododb?sslmode=disable
+    ports:
+      - 9187:9187
+    networks:
+      monitoring:
+        aliases:
+          - todo-db-exporter
+
   webserver:
     image: todolist
     container_name: todo-app
