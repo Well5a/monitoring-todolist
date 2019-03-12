@@ -41,8 +41,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://todo-db:5432/tododb
       SPRING_DATASOURCE_USERNAME: todo
       SPRING_DATASOURCE_PASSWORD: todo
+      INSPECTIT_SERVICE_NAME: todo-service
+      INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT: 8888
+      INSPECTIT_SELF_MONITORING_ENABLED: "true"
     ports:
       - 5555:5555
+      - 8888:8888
     networks:
       monitoring:
         aliases:

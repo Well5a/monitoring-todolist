@@ -75,7 +75,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_cpu_usage",
+          "expr": "process_cpu_usage{service_name='$service'}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "process_cpu_usage",
@@ -84,7 +84,7 @@
           "resultFormat": "time_series"
         },
         {
-          "expr": "system_cpu_usage",
+          "expr": "system_cpu_usage{service_name='$service'}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "system_cpu_usage",
@@ -188,7 +188,7 @@
       "targets": [
         {
           "alias": "max",
-          "expr": "sum(jvm_memory_max_bytes{area=\"heap\"})",
+          "expr": "sum(jvm_memory_max_bytes{service_name='$service', area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -244,7 +244,7 @@
         },
         {
           "alias": "committed",
-          "expr": "sum(jvm_memory_committed_bytes{area=\"heap\"})",
+          "expr": "sum(jvm_memory_committed_bytes{service_name='$service', area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -300,7 +300,7 @@
         },
         {
           "alias": "used",
-          "expr": "sum(jvm_memory_used_bytes{area=\"heap\"})",
+          "expr": "sum(jvm_memory_used_bytes{service_name='$service', area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -441,7 +441,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "jvm_threads_daemon_threads",
+          "expr": "jvm_threads_daemon_threads{service_name='$service'}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "daemon",
@@ -450,7 +450,7 @@
         },
         {
           "alias": "$tag_state",
-          "expr": "jvm_threads_live_threads - jvm_threads_daemon_threads",
+          "expr": "jvm_threads_live_threads{service_name='$service'} - jvm_threads_daemon_threads{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
@@ -504,7 +504,7 @@
           ]
         },
         {
-          "expr": "jvm_threads_peak_threads - jvm_threads_live_threads",
+          "expr": "jvm_threads_peak_threads{service_name='$service'} - jvm_threads_live_threads{service_name='$service'}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "peak",
@@ -612,7 +612,7 @@
       "targets": [
         {
           "alias": "Live Data Size",
-          "expr": "jvm_gc_live_data_size_bytes",
+          "expr": "jvm_gc_live_data_size_bytes{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
@@ -662,7 +662,7 @@
         },
         {
           "alias": "Max Data Size",
-          "expr": "jvm_gc_max_data_size_bytes",
+          "expr": "jvm_gc_max_data_size_bytes{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
@@ -712,7 +712,7 @@
         },
         {
           "alias": "Allocated Memory",
-          "expr": "idelta(jvm_gc_memory_allocated_bytes_total[$__range])",
+          "expr": "idelta(jvm_gc_memory_allocated_bytes_total{service_name='$service'}[$__range])",
           "format": "time_series",
           "groupBy": [
             {
@@ -759,7 +759,7 @@
         },
         {
           "alias": "Promoted Memory",
-          "expr": "idelta(jvm_gc_memory_promoted_bytes_total[$__range])",
+          "expr": "idelta(jvm_gc_memory_promoted_bytes_total{service_name='$service'}[$__range])",
           "format": "time_series",
           "groupBy": [
             {
@@ -907,7 +907,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "process_cpu_usage",
+          "expr": "process_cpu_usage{service_name='$service'}",
           "format": "time_series",
           "groupBy": [],
           "instant": true,
@@ -1017,7 +1017,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "jvm_classes_loaded_classes",
+          "expr": "jvm_classes_loaded_classes{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1123,7 +1123,7 @@
       "targets": [
         {
           "alias": "max",
-          "expr": "sum(jvm_memory_max_bytes{area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_max_bytes{service_name='$service', area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1178,7 +1178,7 @@
         },
         {
           "alias": "committed",
-          "expr": "sum(jvm_memory_committed_bytes{area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_committed_bytes{service_name='$service', area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1233,7 +1233,7 @@
         },
         {
           "alias": "used",
-          "expr": "sum(jvm_memory_used_bytes{area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_used_bytes{service_name='$service', area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1366,7 +1366,7 @@
       "targets": [
         {
           "alias": "$tag_state",
-          "expr": "jvm_threads_states_threads",
+          "expr": "jvm_threads_states_threads{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1501,14 +1501,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "jvm_gc_pause_seconds_sum{action=\"end of minor GC\"}",
+          "expr": "jvm_gc_pause_seconds_sum{service_name='$service', action=\"end of minor GC\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Minor GC",
           "refId": "A"
         },
         {
-          "expr": "jvm_gc_pause_seconds_sum{action=\"end of major GC\"}",
+          "expr": "jvm_gc_pause_seconds_sum{service_name='$service', action=\"end of major GC\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Major GC",
@@ -1618,7 +1618,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "jvm_classes_unloaded_classes_total",
+          "expr": "jvm_classes_unloaded_classes_total{service_name='$service'}",
           "format": "time_series",
           "groupBy": [
             {
