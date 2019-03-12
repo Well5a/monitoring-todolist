@@ -15,10 +15,16 @@ services:
             - todo-db
 
   database-exporter:
-    image: wrouesnel/postgres_exporter
+    image: wrouesnel/postgres_exporter:latest
     container_name: todo-db-exporter
+    depends_on:
+      - database
+    volumes:
+      - ./config/queries.yaml:/etc/config/queries.yaml
     environment:
-      DATA_SOURCE_NAME: postgresql://todo:todo@todo-db:5432/tododb?sslmode=disable
+      DATA_SOURCE_NAME: postgresql://todo:todo@todo-db:5432/tododb?sslmode=disable #<username>:<password>@<server>:<port>/<database>
+      PG_EXPORTER_EXTEND_QUERY_PATH: /etc/config/queries.yaml
+      PG_EXPORTER_DISABLE_DEFAULT_METRICS: "false"
     ports:
       - 9187:9187
     networks:
@@ -43,7 +49,7 @@ services:
           - todo-app
 
   prometheus:
-    image: prom/prometheus:v2.6.1
+    image: prom/prometheus:latest
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
@@ -55,7 +61,7 @@ services:
           - prometheus
 
   grafana:
-    image: grafana/grafana:5.4.3
+    image: grafana/grafana:latest
     volumes:
       - ./grafana/provisioning:/usr/share/grafana/custom/
     environment:
