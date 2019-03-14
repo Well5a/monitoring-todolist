@@ -8,6 +8,7 @@ original app: https://github.com/Well5a/vertsys-todolist
 * updated to latest Spring Boot release (currently 2.1.3)
 * changed server port to 5555
 * implemented monitoring tool chain with micrometer, prometheus and grafana
+* implemented InspectIT OCE for metric collection and exposure
 
 ## Build the app
 ```
@@ -34,3 +35,7 @@ Dashboards and datasources are added and updated automatically through config fi
 If you need to add datasources manually these are the necessary credentials:
 * Prometheus: URL=http://prometheus:9090
 * PostgreSQL: host=todo-db:5432 database=tododb user=todo password=todo ssl=disable
+
+### InspectIT OCE 
+[InspectIT OCE](https://github.com/inspectIT/inspectit-oce) collects metrics of the application and exposes them at localhost:8888.
+Prometheus is configured to scrape this endpoint and additional Grafana Dashboards are added that use these metrics.
