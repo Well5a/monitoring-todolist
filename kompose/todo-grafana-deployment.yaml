@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: todo-grafana
+  name: todo-grafana
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: todo-grafana
+    spec:
+      containers:
+      - env:
+        - name: GF_PATHS_PROVISIONING
+          value: /usr/share/grafana/custom/
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: todo
+        - name: GF_SECURITY_ADMIN_USER
+          value: admin
+        image: grafana/grafana:latest
+        name: todo-grafana
+        ports:
+        - containerPort: 3000
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/share/grafana/custom/
+          name: todo-grafana-claim0
+      restartPolicy: Always
+      volumes:
+      - name: todo-grafana-claim0
+        persistentVolumeClaim:
+          claimName: todo-grafana-claim0
+status: {}

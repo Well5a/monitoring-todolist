@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: todo-db
+  name: todo-db
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: todo-db
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: tododb
+        - name: POSTGRES_PASSWORD
+          value: todo
+        - name: POSTGRES_USER
+          value: todo
+        image: postgres
+        name: todo-db
+        ports:
+        - containerPort: 5432
+        resources: {}
+      restartPolicy: Always
+status: {}

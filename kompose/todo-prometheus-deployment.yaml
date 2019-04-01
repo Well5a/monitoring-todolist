@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: todo-prometheus
+  name: todo-prometheus
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: todo-prometheus
+    spec:
+      containers:
+      - image: prom/prometheus:latest
+        name: todo-prometheus
+        ports:
+        - containerPort: 9090
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/prometheus/prometheus.yml
+          name: todo-prometheus-claim0
+      restartPolicy: Always
+      volumes:
+      - name: todo-prometheus-claim0
+        persistentVolumeClaim:
+          claimName: todo-prometheus-claim0
+status: {}

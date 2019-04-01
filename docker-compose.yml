@@ -1,6 +1,6 @@
 version: '3'
 services:
-  database:
+  todo-db:
     image: postgres
     container_name: todo-db
     environment:
@@ -9,16 +9,12 @@ services:
       POSTGRES_DB: tododb
     ports:
       - 5432:5432
-    networks:
-      monitoring:
-          aliases:
-            - todo-db
 
-  database-exporter:
+  todo-db-exporter:
     image: wrouesnel/postgres_exporter:latest
     container_name: todo-db-exporter
     depends_on:
-      - database
+      - todo-db
     volumes:
       - ./config/queries.yaml:/etc/config/queries.yaml
     environment:
@@ -27,45 +23,34 @@ services:
       PG_EXPORTER_DISABLE_DEFAULT_METRICS: "false"
     ports:
       - 9187:9187
-    networks:
-      monitoring:
-        aliases:
-          - todo-db-exporter
 
-  todo-service:
+  todo-app:
     image: todolist
     container_name: todo-app
     depends_on:
-      - database
+      - todo-db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://todo-db:5432/tododb
       SPRING_DATASOURCE_USERNAME: todo
       SPRING_DATASOURCE_PASSWORD: todo
-      INSPECTIT_SERVICE_NAME: todo-service
+      INSPECTIT_SERVICE_NAME: todo-app
       INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT: 8888
       INSPECTIT_SELF_MONITORING_ENABLED: "true"
     ports:
       - 5555:5555
       - 8888:8888
-    networks:
-      monitoring:
-        aliases:
-          - todo-app
 
-  prometheus:
+  todo-prometheus:
     image: prom/prometheus:latest
+    container_name: todo-prometheus
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-      #- ./prometheus:/prometheus
     ports:
       - 9090:9090
-    networks:
-      monitoring:
-        aliases:
-          - prometheus
 
-  grafana:
+  todo-grafana:
     image: grafana/grafana:latest
+    container_name: todo-grafana
     volumes:
       - ./grafana/provisioning:/usr/share/grafana/custom/
     environment:
@@ -74,10 +59,3 @@ services:
       - GF_PATHS_PROVISIONING=/usr/share/grafana/custom/
     ports:
       - 3000:3000
-    networks:
-      monitoring:
-        aliases:
-          - grafana
-
-networks:
-  monitoring:
