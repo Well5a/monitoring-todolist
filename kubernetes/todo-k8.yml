@@ -44,7 +44,15 @@ spec:
         - containerPort: 5555
         - containerPort: 8888
         resources: {}
+        volumeMounts:
+          - name: todo-agent-volume
+            mountPath: /agent
       restartPolicy: Always
+      volumes:
+        - name: todo-agent-volume
+          hostPath:
+            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/agent/
+            type: Directory
 status: {}
 ---
 apiVersion: extensions/v1beta1

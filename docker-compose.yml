@@ -47,10 +47,8 @@ services:
       INSPECTIT_SERVICE_NAME: todo-app
       INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT: 8888
       INSPECTIT_SELF_MONITORING_ENABLED: "true"
-      INSPECTIT_CONFIG_FILE_BASED_PATH: /agentconfig
     entrypoint: ["sh", "-c", "java -javaagent:/agent/inspectit-ocelot-agent.jar -jar /app.jar"]
     volumes:
-      - ./config/inspectit:/agentconfig
       - agent-vol:/agent
     ports:
       - 5555:5555
