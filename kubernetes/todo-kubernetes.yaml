@@ -1,0 +1,124 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: todo
+  name: todo-app
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: todo
+      annotations:
+        prometheus.io/path: '/actuator/prometheus'
+        #prometheus.io/port: '5555'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        - env:
+            - name: INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT
+              value: "8888"
+            - name: INSPECTIT_SELF_MONITORING_ENABLED
+              value: "true"
+            - name: INSPECTIT_SERVICE_NAME
+              value: todo-app
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://${todo-service.service.host}:5432/tododb
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: todo
+            - name: SPRING_DATASOURCE_USERNAME
+              value: todo
+          image: todolist
+          name: todo-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5555
+            - containerPort: 8888
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: todo
+  name: todo-db
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: todo
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: tododb
+            - name: POSTGRES_PASSWORD
+              value: todo
+            - name: POSTGRES_USER
+              value: todo
+          image: postgres
+          name: todo-db
+          ports:
+            - containerPort: 5432
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo
+  name: todo-service
+  namespace: todo-application
+spec:
+  type: NodePort
+  ports:
+    - name: "application"
+      port: 5555
+      targetPort: 5555
+      nodePort: 31555
+    - name: "inspectit"
+      port: 8888
+      targetPort: 8888
+      nodePort: 31888
+    - name: "database"
+      port: 5432
+      targetPort: 5432
+      nodePort: 31432
+  selector:
+    app: todo
+status:
+  loadBalancer: {}
+---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: todo-ingress
+#  namespace: todo-application
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#spec:
+#  rules:
+#    - host: todo.list
+#      http:
+#        paths:
+#          - path: /
+#            backend:
+#              serviceName: todo-service
+#              servicePort: 5555
+#          - path: /metrics
+#            backend:
+#              serviceName: todo-service
+#              servicePort: 8888

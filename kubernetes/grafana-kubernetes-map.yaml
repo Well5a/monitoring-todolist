@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources-conf
+  labels:
+    name: grafana-datasources-conf
+    namespace: todo-application
+data:
+  datasources.yml: |-
+    apiVersion: 1
+
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      orgId: 1
+      url: http://10.0.2.15:31000
+      jsonData:
+        timeInterval: "15s"
+      secureJsonData:
+        tlsCACert: "..."
+        tlsClientCert: "..."
+        tlsClientKey: "..."
+      version: 1
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana-deployment
+  namespace: todo-application
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - env:
+            - name: GF_PATHS_PROVISIONING
+              value: /usr/share/grafana/custom/
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: todo
+            - name: GF_SECURITY_ADMIN_USER
+              value: admin
+          image: grafana/grafana:latest
+          name: grafana
+          ports:
+            - containerPort: 3000
+          resources: {}
+          volumeMounts:
+            - name: grafana-dashboards-volume
+              mountPath: /usr/share/grafana/custom/dashboards
+            - name: grafana-datasources-volume
+              mountPath: /usr/share/grafana/custom/datasources
+      restartPolicy: Always
+      volumes:
+        - name: grafana-dashboards-volume
+          hostPath:
+            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
+            type: Directory
+        - name: grafana-datasources-volume
+          configMap:
+            defaultMode: 420
+            name: grafana-datasources-conf
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: grafana
+  name: grafana-service
+  namespace: todo-application
+spec:
+  type: NodePort
+  ports:
+    - name: "grafana"
+      port: 3000
+      targetPort: 3000
+      nodePort: 31300
+  selector:
+    app: grafana
+status:
+  loadBalancer: {}
