@@ -8,7 +8,6 @@ metadata:
   labels:
     io.kompose.service: todo-app
   name: todo-app
-  namespace: todo-application
 spec:
   ports:
   - name: "5555"

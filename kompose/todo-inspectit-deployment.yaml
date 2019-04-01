@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
-    io.kompose.service: todo-prometheus
-  name: todo-prometheus
+    io.kompose.service: todo-inspectit
+  name: todo-inspectit
 spec:
   replicas: 1
   strategy:
@@ -16,20 +16,18 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: todo-prometheus
+        io.kompose.service: todo-inspectit
     spec:
       containers:
-      - image: prom/prometheus:latest
-        name: todo-prometheus
-        ports:
-        - containerPort: 9090
+      - image: inspectit/inspectit-ocelot-agent:latest
+        name: todo-inspectit
         resources: {}
         volumeMounts:
-        - mountPath: /etc/prometheus/prometheus.yml
-          name: todo-prometheus-claim0
+        - mountPath: /agent
+          name: agent-vol
       restartPolicy: Always
       volumes:
-      - name: todo-prometheus-claim0
+      - name: agent-vol
         persistentVolumeClaim:
-          claimName: todo-prometheus-claim0
+          claimName: agent-vol
 status: {}

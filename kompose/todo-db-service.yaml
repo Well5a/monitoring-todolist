@@ -8,7 +8,6 @@ metadata:
   labels:
     io.kompose.service: todo-db
   name: todo-db
-  namespace: todo-application
 spec:
   ports:
   - name: "5432"

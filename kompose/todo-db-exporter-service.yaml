@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
-    io.kompose.service: todo-grafana
-  name: todo-grafana
+    io.kompose.service: todo-db-exporter
+  name: todo-db-exporter
 spec:
   ports:
-  - name: "3000"
-    port: 3000
-    targetPort: 3000
+  - name: "9187"
+    port: 9187
+    targetPort: 9187
   selector:
-    io.kompose.service: todo-grafana
+    io.kompose.service: todo-db-exporter
 status:
   loadBalancer: {}

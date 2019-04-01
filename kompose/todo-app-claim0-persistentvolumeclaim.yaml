@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: todo-prometheus-claim0
-  name: todo-prometheus-claim0
+    io.kompose.service: todo-app-claim0
+  name: todo-app-claim0
 spec:
   accessModes:
   - ReadWriteOnce

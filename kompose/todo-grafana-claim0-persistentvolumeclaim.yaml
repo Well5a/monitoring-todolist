@@ -5,7 +5,6 @@ metadata:
   labels:
     io.kompose.service: todo-grafana-claim0
   name: todo-grafana-claim0
-  namespace: todo-application
 spec:
   accessModes:
   - ReadWriteOnce

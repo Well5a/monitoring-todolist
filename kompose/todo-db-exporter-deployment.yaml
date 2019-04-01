@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: todo-db-exporter
+  name: todo-db-exporter
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: todo-db-exporter
+    spec:
+      containers:
+      - env:
+        - name: DATA_SOURCE_NAME
+          value: postgresql://todo:todo@todo-db:5432/tododb?sslmode=disable
+        - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+          value: "false"
+        - name: PG_EXPORTER_EXTEND_QUERY_PATH
+          value: /etc/config/queries.yml
+        image: wrouesnel/postgres_exporter:latest
+        name: todo-db-exporter
+        ports:
+        - containerPort: 9187
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/config/queries.yml
+          name: todo-db-exporter-claim0
+      restartPolicy: Always
+      volumes:
+      - name: todo-db-exporter-claim0
+        persistentVolumeClaim:
+          claimName: todo-db-exporter-claim0
+status: {}
