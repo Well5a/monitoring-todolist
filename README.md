@@ -50,7 +50,7 @@ These files won't create a working application and were merely used as templates
 ### Prerequisites
 * Kubernetes cluster (e.g. local [Minikube installation](https://kubernetes.io/docs/setup/minikube/))
 * For the todo application the image from your local docker repository is used so be sure to build the app and the image first.
-* The app is deployed to the custom namespace "todo-application" you need to create it first on your cluster with `kubectl create ns todo-application`.
+* The app is deployed to the custom namespace "todo-application" which needs to be created first on your cluster with `kubectl create ns todo-application`.
 
 ### Access
 After deploying the app on your cluster the endpoints will become available on the internal IP address of your node.
