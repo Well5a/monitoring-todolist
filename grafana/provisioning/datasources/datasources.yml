@@ -13,7 +13,7 @@ datasources:
   # <int> org id. will default to orgId 1 if not specified
   orgId: 1
   # <string> url
-  url: http://prometheus:9090
+  url: http://todo-prometheus:9090
   jsonData:
     timeInterval: "15s"
   secureJsonData:

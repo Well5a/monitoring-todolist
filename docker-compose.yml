@@ -1,5 +1,13 @@
 version: '3'
 services:
+  todo-inspectit:
+    image: inspectit/inspectit-ocelot-agent:latest
+    container_name: todo-inspectit
+    volumes:
+      - agent-vol:/agent
+
+## Database
+
   todo-db:
     image: postgres
     container_name: todo-db
@@ -24,11 +32,14 @@ services:
     ports:
       - 9187:9187
 
+## App
+
   todo-app:
     image: todolist
     container_name: todo-app
     depends_on:
       - todo-db
+      - todo-inspectit
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://todo-db:5432/tododb
       SPRING_DATASOURCE_USERNAME: todo
@@ -36,9 +47,16 @@ services:
       INSPECTIT_SERVICE_NAME: todo-app
       INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT: 8888
       INSPECTIT_SELF_MONITORING_ENABLED: "true"
+      INSPECTIT_CONFIG_FILE_BASED_PATH: /agentconfig
+    entrypoint: ["sh", "-c", "java -javaagent:/agent/inspectit-ocelot-agent.jar -jar /app.jar"]
+    volumes:
+      - ./config/inspectit:/agentconfig
+      - agent-vol:/agent
     ports:
       - 5555:5555
       - 8888:8888
+
+## Monitoring
 
   todo-prometheus:
     image: prom/prometheus:latest
@@ -59,3 +77,6 @@ services:
       - GF_PATHS_PROVISIONING=/usr/share/grafana/custom/
     ports:
       - 3000:3000
+
+volumes:
+  agent-vol:
