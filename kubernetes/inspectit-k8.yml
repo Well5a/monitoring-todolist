@@ -11,9 +11,8 @@ spec:
     type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: todo-inspectit
+        name: todo-inspectit
     spec:
       containers:
         - image: inspectit/inspectit-ocelot-agent:latest
@@ -26,6 +25,6 @@ spec:
       volumes:
         - name: todo-agent-volume
           hostPath:
-            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/agent/
-            type: Directory
+          persistentVolumeClaim:
+            claimName: todo-agent-claim
 status: {}

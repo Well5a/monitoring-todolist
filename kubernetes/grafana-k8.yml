@@ -22,6 +22,19 @@ data:
         tlsClientCert: "..."
         tlsClientKey: "..."
       version: 1
+      editable: true
+    - name: PostgreSQL
+      type: postgres
+      access: proxy
+      url: 10.0.2.15:31432
+      database: tododb
+      user: todo
+      secureJsonData:
+        password: todo
+      jsonData:
+        sslmode: "disable"
+        postgresVersion: 903
+      editable: true
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
