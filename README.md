@@ -42,7 +42,7 @@ If you need to add datasources manually these are the necessary credentials:
 Prometheus is configured to scrape this endpoint and additional Grafana Dashboards are added that use these metrics.
 
 ### PostgreSQL Exporter (database metrics)
-PostgreSQL saves various metrics about the database server in form of a set of tables. 
+PostgreSQL saves various metrics about the database server in form of a set of tables (e.g [system catalog](https://www.postgresql.org/docs/current/catalogs.html). 
 The [PostgreSQL Exporter](https://github.com/wrouesnel/postgres_exporter) exports and exposes these metrics on default port 9187 for use by Prometheus.
 A dashboard for these metrics is also included.
 
