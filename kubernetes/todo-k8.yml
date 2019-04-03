@@ -16,7 +16,6 @@ spec:
         service: todo
       annotations:
         prometheus.io/path: '/actuator/prometheus'
-        #prometheus.io/port: '5555'
         prometheus.io/scrape: 'true'
     spec:
       containers:
@@ -100,11 +99,21 @@ spec:
     metadata:
       labels:
         service: todo
+      annotations:
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '9187'
+        prometheus.io/scrape: 'true'
     spec:
       containers:
         - env:
-            - name: DATA_SOURCE_NAME
-              value: postgresql://todo:todo@${todo-service.service.host}:5432/tododb?sslmode=disable
+            - name: DATA_SOURCE_URI
+              value: 10.0.2.15:31432/tododb?sslmode=disable
+            - name: DATA_SOURCE_USER
+              value: todo
+            - name: DATA_SOURCE_PASS
+              value: todo
+            - name: PG_EXPORTER_WEB_TELEMETRY_PATH
+              value: /metrics
             - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
               value: "false"
             - name: PG_EXPORTER_EXTEND_QUERY_PATH
