@@ -41,6 +41,11 @@ If you need to add datasources manually these are the necessary credentials:
 [InspectIT Ocelot](https://github.com/inspectIT/inspectit-ocelot) collects metrics of the application and exposes them at localhost:8888.
 Prometheus is configured to scrape this endpoint and additional Grafana Dashboards are added that use these metrics.
 
+### PostgreSQL Exporter (database metrics)
+PostgreSQL saves various metrics about the database server in form of a set of tables. 
+The [PostgreSQL Exporter](https://github.com/wrouesnel/postgres_exporter) exports and exposes these metrics on default port 9187 for use by Prometheus.
+A dashboard for these metrics is also included.
+
 ## Kubernetes
 Folder "Kubernetes" holds config files for deploying the app with Prometheus and Grafana to a Kubernetes cluster.
 Until now only deployment on local cluster with Minikube has been tested. 
@@ -60,6 +65,8 @@ The ports of the services are specified in the config files with the "NodePort" 
 * InspectIT: 31888
 * Prometheus: 31000
 * Grafana: 31300
+
+The todo-service includes the app, the database and the database metric exporter.
 
 With Minikube you can access a dashboard that shows the availability of your cluster and the ressources within.
 Command `kubectl proxy` makes the dashboard available at localhost:8001.
