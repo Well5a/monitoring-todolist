@@ -12,7 +12,7 @@ target/
 *.iml
 
 # inspectit jar
-inspectit/*.jar
+agent/*.jar
 
 # Branch switching
 generated/
