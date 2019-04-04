@@ -41,6 +41,9 @@ If you need to add datasources manually these are the necessary credentials:
 [InspectIT Ocelot](https://github.com/inspectIT/inspectit-ocelot) collects metrics of the application and exposes them at localhost:8888.
 Prometheus is configured to scrape this endpoint and additional Grafana Dashboards are added that use these metrics.
 
+The InspectIT Ocelot Docker image saves the agent jar on a provided volume.
+Other microservices can access this volume to get the agent and inject it via an overwritten entrypoint.
+
 ### PostgreSQL Exporter (database metrics)
 PostgreSQL saves various metrics about the database server in form of a set of tables (e.g [system catalog](https://www.postgresql.org/docs/current/catalogs.html)). 
 The [PostgreSQL Exporter](https://github.com/wrouesnel/postgres_exporter) exports and exposes these metrics on default port 9187 for use by Prometheus.
