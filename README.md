@@ -45,7 +45,7 @@ The InspectIT Ocelot Docker image saves the agent jar on a provided volume.
 Other microservices can access this volume to get the agent and inject it via an overwritten entrypoint.
 
 ### PostgreSQL Exporter (database metrics)
-PostgreSQL saves various metrics about the database server in form of a set of tables (e.g [system catalog](https://www.postgresql.org/docs/current/catalogs.html)). 
+PostgreSQL saves various metrics about the database server in form of a set of tables (e.g. with the [Statistics Collector](https://www.postgresql.org/docs/11/monitoring-stats.html)). 
 The [PostgreSQL Exporter](https://github.com/wrouesnel/postgres_exporter) exports and exposes these metrics on default port 9187 for use by Prometheus.
 A dashboard for these metrics is also included.
 

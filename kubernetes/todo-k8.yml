@@ -32,7 +32,7 @@ spec:
         - name: INSPECTIT_SERVICE_NAME
           value: todo-app
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://${todo-service.service.host}:5432/tododb
+          value: jdbc:postgresql://${todo-service.service.host}:5432/tododb # env variable for host address
         - name: SPRING_DATASOURCE_PASSWORD
           value: todo
         - name: SPRING_DATASOURCE_USERNAME
