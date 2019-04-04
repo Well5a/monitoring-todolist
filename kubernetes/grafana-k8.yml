@@ -5,7 +5,7 @@ metadata:
   namespace: todo-application
   labels:
     name: grafana-datasources-conf
-data:
+data: # hardcoded addresses & ports
   datasources.yml: |-
     apiVersion: 1
 
@@ -74,7 +74,7 @@ spec:
       restartPolicy: Always
       volumes:
         - name: grafana-dashboards-volume
-          hostPath:
+          hostPath:   # hardcoded path
             path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
             type: Directory
         - name: grafana-datasources-volume

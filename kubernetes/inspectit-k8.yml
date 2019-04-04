@@ -11,8 +11,7 @@ spec:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
+  hostPath:   # hardcoded path
     path: "/home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/agent/"
     type: Directory
 ---
@@ -29,33 +28,33 @@ spec:
     requests:
       storage: 3Gi
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    app: todo-inspectit
-  name: todo-inspectit
-  namespace: todo-application
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        name: todo-inspectit
-    spec:
-      containers:
-        - image: inspectit/inspectit-ocelot-agent:latest
-          name: todo-inspectit
-          resources: {}
-          volumeMounts:
-            - name: todo-agent-volume
-              mountPath: /agent
-      restartPolicy: Always
-      volumes:
-        - name: todo-agent-volume
-          hostPath:
-          persistentVolumeClaim:
-            claimName: todo-agent-claim
-status: {}
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  labels:
+#    app: todo-inspectit
+#  name: todo-inspectit
+#  namespace: todo-application
+#spec:
+#  replicas: 1
+#  strategy:
+#    type: Recreate
+#  template:
+#    metadata:
+#      labels:
+#        name: todo-inspectit
+#    spec:
+#      containers:
+#        - image: inspectit/inspectit-ocelot-agent:latest
+#          name: todo-inspectit
+#          resources: {}
+#          volumeMounts:
+#            - name: todo-agent-volume
+#              mountPath: /agent
+#      restartPolicy: Always
+#      volumes:
+#        - name: todo-agent-volume
+#          hostPath:
+#          persistentVolumeClaim:
+#            claimName: todo-agent-claim
+#status: {}

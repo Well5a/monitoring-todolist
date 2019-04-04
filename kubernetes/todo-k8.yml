@@ -15,7 +15,7 @@ spec:
       labels:
         service: todo
       annotations:
-        prometheus.io/path: '/actuator/prometheus'
+        prometheus.io/path: '/actuator/prometheus'  # scrape both ports 5555 & 8888
         prometheus.io/scrape: 'true'
     spec:
       containers:
@@ -62,11 +62,16 @@ metadata:
   namespace: todo-application
 spec:
   replicas: 1
-  strategy: {}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         service: todo
+      annotations:
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '9187'
+        prometheus.io/scrape: 'true'
     spec:
       containers:
         - env:
@@ -81,33 +86,9 @@ spec:
           ports:
             - containerPort: 5432
           resources: {}
-      restartPolicy: Always
-status: {}
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    service: todo
-  name: todo-db-exporter
-  namespace: todo-application
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        service: todo
-      annotations:
-        prometheus.io/path: '/metrics'
-        prometheus.io/port: '9187'
-        prometheus.io/scrape: 'true'
-    spec:
-      containers:
         - env:
             - name: DATA_SOURCE_URI
-              value: 10.0.2.15:31432/tododb?sslmode=disable
+              value: localhost:5432/tododb?sslmode=disable   # hardcoded address & port
             - name: DATA_SOURCE_USER
               value: todo
             - name: DATA_SOURCE_PASS
@@ -129,7 +110,7 @@ spec:
       restartPolicy: Always
       volumes:
         - name: todo-db-exporter-volume
-          hostPath:
+          hostPath: # hardcoded path
             path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/config/queries.yml
             type: File
 status: {}
