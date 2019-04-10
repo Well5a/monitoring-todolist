@@ -18,8 +18,8 @@ spec:
     spec:
       containers:
       - name: todo-app
-        image: todolist
-        imagePullPolicy: IfNotPresent # pull from local repository
+        image: well5a/todolist
+        #imagePullPolicy: IfNotPresent # pull from local repository
         command:
         - sh
         - -c
