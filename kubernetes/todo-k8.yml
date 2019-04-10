@@ -88,7 +88,7 @@ spec:
           image: wrouesnel/postgres_exporter:latest
           env:
             - name: DATA_SOURCE_URI
-              value: localhost:5432/tododb?sslmode=disable   # hardcoded address & port
+              value: localhost:5432/tododb?sslmode=disable
             - name: DATA_SOURCE_USER
               value: todo
             - name: DATA_SOURCE_PASS
