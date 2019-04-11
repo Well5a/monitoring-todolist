@@ -32,7 +32,7 @@ spec:
         - name: INSPECTIT_SERVICE_NAME
           value: todo-app
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://${todo-service.service.host}:5432/tododb # env variable for host address
+          value: jdbc:postgresql://todo-service:5432/tododb # env variable for host address
         - name: SPRING_DATASOURCE_PASSWORD
           value: todo
         - name: SPRING_DATASOURCE_USERNAME
@@ -130,15 +130,12 @@ spec:
     - name: "inspectit"
       port: 8888
       targetPort: 8888
-      nodePort: 31888
     - name: "database"
       port: 5432
       targetPort: 5432
-      nodePort: 31432
     - name: "database-exporter"
       port: 9187
       targetPort: 9187
-      nodePort: 31187
 status:
   loadBalancer: {}
 ---

@@ -210,4 +210,6 @@ spec:
     - name: "prometheus"
       port: 9090
       targetPort: 9090
-      nodePort: 31000
+      nodePort: 31090
+status:
+  loadBalancer: {}

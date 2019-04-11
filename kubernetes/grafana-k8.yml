@@ -14,7 +14,7 @@ data: # hardcoded addresses & ports because Grafana does not support environment
       type: prometheus
       access: proxy
       orgId: 1
-      url: http://10.0.2.15:31000
+      url: http://prometheus-service:9090
       jsonData:
         timeInterval: "15s"
       secureJsonData:
@@ -26,7 +26,7 @@ data: # hardcoded addresses & ports because Grafana does not support environment
     - name: PostgreSQL
       type: postgres
       access: proxy
-      url: 10.0.2.15:31432
+      url: todo-service:5432
       database: tododb
       user: todo
       secureJsonData:
