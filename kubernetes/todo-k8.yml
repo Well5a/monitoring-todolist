@@ -32,7 +32,7 @@ spec:
         - name: INSPECTIT_SERVICE_NAME
           value: todo-app
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://todo-service:5432/tododb # env variable for host address
+          value: jdbc:postgresql://todo-service:5432/tododb
         - name: SPRING_DATASOURCE_PASSWORD
           value: todo
         - name: SPRING_DATASOURCE_USERNAME
@@ -88,7 +88,7 @@ spec:
           image: wrouesnel/postgres_exporter:latest
           env:
             - name: DATA_SOURCE_URI
-              value: localhost:5432/tododb?sslmode=disable
+              value: 0.0.0.0:5432/tododb?sslmode=disable # localhost is not working
             - name: DATA_SOURCE_USER
               value: todo
             - name: DATA_SOURCE_PASS

@@ -5,7 +5,7 @@ metadata:
   namespace: todo-application
   labels:
     name: grafana-datasources-conf
-data: # hardcoded addresses & ports because Grafana does not support environmental variables
+data:
   datasources.yml: |-
     apiVersion: 1
 
