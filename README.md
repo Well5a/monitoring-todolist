@@ -13,7 +13,7 @@ original app: https://github.com/Well5a/vertsys-todolist
 
 ## Build the app
 ```
-mvn clean package
+mvn clean install
 ```
 
 ## App usage (mappings)
@@ -22,9 +22,12 @@ mvn clean package
 * `curl -X DELETE localhost:5555/id` to delete a task from the list
 
 ## Start the app with Docker-Compose
-* build the app
-* build image of the app: execute `docker build -t todolist .` in project root directory
-* run: 'docker-compose up' in root directory to start the app
+Run `docker-compose up` in root directory to start the app.
+
+This will automatically pull the images from Dockerhub, you can find the todolist app [here](https://hub.docker.com/r/well5a/todolist).
+You can also get the image
+* locally: Build the app, then the image with `docker build -t todolist .` in project root directory
+* or by pulling it manually from Dockerhub: `docker pull well5a/todolist`
 
 ## Metrics Monitoring
 * Prometheus: http://localhost:9090
@@ -65,8 +68,7 @@ After deploying the app on your cluster the endpoints will become available on t
 Get it with `kubectl get nodes -o wide`. 
 The ports of the services are specified in the config files with the "NodePort" tag:
 * todo-service: 31555
-* InspectIT: 31888
-* Prometheus: 31000
+* Prometheus: 31090
 * Grafana: 31300
 
 The todo-service includes the app, the database and the database metric exporter.
