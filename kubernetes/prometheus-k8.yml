@@ -203,13 +203,12 @@ metadata:
   name: prometheus-service
   namespace: todo-application
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: prometheus-server
   ports:
     - name: "prometheus"
       port: 9090
       targetPort: 9090
-      nodePort: 31090
 status:
   loadBalancer: {}

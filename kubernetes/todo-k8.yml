@@ -102,15 +102,15 @@ spec:
           ports:
             - containerPort: 9187
           resources: {}
-          volumeMounts:
-            - name: todo-db-exporter-volume
-              mountPath: /etc/config/queries.yml
+#          volumeMounts:
+#            - name: todo-db-exporter-volume
+#              mountPath: /etc/config/queries.yml
       restartPolicy: Always
-      volumes:
-        - name: todo-db-exporter-volume
-          hostPath: # hardcoded path
-            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/config/queries.yml
-            type: File
+#      volumes:
+#        - name: todo-db-exporter-volume
+#          hostPath: # hardcoded path
+#            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/config/queries.yml
+#            type: File
 status: {}
 ---
 apiVersion: v1
@@ -119,14 +119,13 @@ metadata:
   name: todo-service
   namespace: todo-application
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     service: todo
   ports:
     - name: "application"
       port: 5555
       targetPort: 5555
-      nodePort: 31555
     - name: "inspectit"
       port: 8888
       targetPort: 8888

@@ -4,7 +4,7 @@ metadata:
   name: todo-agent-claim
   namespace: todo-application
 spec:
-  storageClassName: standard
+  storageClassName: default       # minikube: standard | azure: default
   accessModes:
     - ReadWriteOnce
   resources:
