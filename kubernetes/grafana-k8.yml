@@ -36,19 +36,6 @@ data:
         postgresVersion: 903
       editable: true
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: grafana-dashboard-claim
-  namespace: todo-application
-spec:
-  storageClassName: default       # minikube: standard | azure: default
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 3Gi
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -79,16 +66,17 @@ spec:
             - containerPort: 3000
           resources: {}
           volumeMounts:
- #           - name: grafana-dashboards-volume
- #             mountPath: /usr/share/grafana/custom/dashboards
+            - name: grafana-dashboards-volume
+              mountPath: /usr/share/grafana/custom/dashboards
             - name: grafana-datasources-volume
               mountPath: /usr/share/grafana/custom/datasources
       restartPolicy: Always
       volumes:
-#        - name: grafana-dashboards-volume
-#          hostPath:   # hardcoded path
-#            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
-#            type: Directory
+        - name: grafana-dashboards-volume
+          azureFile:
+            secretName: todo-grafana-secret
+            shareName: monitoring-share
+            readOnly: false
         - name: grafana-datasources-volume
           configMap:
             defaultMode: 420
