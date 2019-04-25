@@ -10,6 +10,8 @@ original app: https://github.com/Well5a/vertsys-todolist
 * implemented monitoring tool chain with micrometer, prometheus and grafana
 * implemented InspectIT Ocelot for metric collection and exposure
 * added Kubernetes config files
+* added azure scripts to create azure resources and deploy the application
+* pushed app to Dockerhub
 
 ## Build the app
 ```
@@ -41,7 +43,7 @@ If you need to add datasources manually these are the necessary credentials:
 * PostgreSQL: host=todo-db:5432 database=tododb user=todo password=todo ssl=disable
 
 ### InspectIT Ocelot
-[InspectIT Ocelot](https://github.com/inspectIT/inspectit-ocelot) collects metrics of the application and exposes them at localhost:8888.
+[InspectIT Ocelot](https://github.com/inspectIT/inspectit-ocelot) collects metrics of the application and exposes them by default on port 8888.
 Prometheus is configured to scrape this endpoint and additional Grafana Dashboards are added that use these metrics.
 
 The InspectIT Ocelot Docker image saves the agent jar on a provided volume.
@@ -52,26 +54,51 @@ PostgreSQL saves various metrics about the database server in form of a set of t
 The [PostgreSQL Exporter](https://github.com/wrouesnel/postgres_exporter) exports and exposes these metrics on default port 9187 for use by Prometheus.
 A dashboard for these metrics is also included.
 
-## Kubernetes
+## Kubernetes and Azure Cloud
 Folder "Kubernetes" holds config files for deploying the app with Prometheus and Grafana to a Kubernetes cluster.
-Until now only deployment on local cluster with Minikube has been tested. 
+The todo-service includes the app, the database and the database metric exporter.
+
+The default way to deploy this app with these Kubernetes files is on Azure cloud.
+Deployment on a local cluster with Minikube has also been tested. 
+
 The Folder "Kompose" holds Kubernetes config files generated with [Kompose](http://kompose.io/). 
 These files won't create a working application and were merely used as templates.
 
-### Prerequisites
-* Kubernetes cluster (e.g. local [Minikube installation](https://kubernetes.io/docs/setup/minikube/))
-* For the todo application the image from your local docker repository is used so be sure to build the app and the image first.
-* The app is deployed to the custom namespace "todo-application" which needs to be created first on your cluster with `kubectl create ns todo-application`.
+### Prerequisites for Azure
+* local [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installation
+* local [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installation
+* Azure account
 
-### Access
-After deploying the app on your cluster the endpoints will become available on the internal IP address of your node.
-Get it with `kubectl get nodes -o wide`. 
-The ports of the services are specified in the config files with the "NodePort" tag:
-* todo-service: 31555
-* Prometheus: 31090
-* Grafana: 31300
+### Deploying on Azure
+Simply execute the "createResources.sh" script in folder "azure".
+This automatically creates the necessary ressources on your Azure cloud like storage shares and the Kubernetes cluster. 
+Afterwards it deploys the app which will then be reachable on the external endpoints of the Kubernetes services.
+Because the script also sets this cluster as the default instance of your local kubectl installation you can simply execute `kubectl get services` to get a list of the Kubernetes services and their available endpoints.
 
-The todo-service includes the app, the database and the database metric exporter.
+Note that at one point in the execution of the script you will be asked for root permissions. 
+This is necessary to install kubectl for the Azure CLI. 
+However this needs to be done only once so you could also install it manually before executing the script for the first time and comment the line out.
+
+### Deploying on another cloud provider or locally
+Per default the Kubernetes files are configured to use Azure resources.
+If you want to deploy to another cloud provider or on a local environment like Minikube you have to change some lines of code.
+The following list shows the Kubernetes config files that need changes and how to take care of them:
+* grafana-k8.yml: The grafana deployment uses the Azure File volume implementation for the dashboards and dashboard config.
+    Change this to an appropriate [volume implementation](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) of your desired cloud provider.
+    Alternatively use the "hostpath" implementation for a local cluster that was commented out.
+* inspectit-k8.yml: The Persistent Volume Claim uses the default storage class in the Kubernetes cluster.
+    The identification of the storage class can differ depending on Kubernetes installation.
+    For example on Azure it is called "default" whereas Minikube is using "standard" as the identifier.
+
+
+### Deploying with Minikube
+For testing or development purposes it is often recommended to use a local Kubernetes instance like [Minikube](https://kubernetes.io/docs/setup/minikube/).
+
+First the custom namespace "todo-application" needs to be created on your cluster with `kubectl create ns todo-application`.
+After that deploy the app with `kubectl apply -f ./kubernetes` from the project root.
+
+After that the app will become available on the external endpoints of the Kubernetes services.
 
 With Minikube you can access a dashboard that shows the availability of your cluster and the ressources within.
-Command `kubectl proxy` makes the dashboard available at localhost:8001.
+Command `kubectl proxy` provides this dashboard at localhost:8001.
+

@@ -20,8 +20,8 @@ az storage account create \
 -l ${AKS_LOCATION} \
 --sku Standard_LRS
 
-# Export the connection string as an environment variable, this is used when creating the Azure file share
-export AZURE_STORAGE_CONNECTION_STRING=`az storage account show-connection-string -n ${AKS_STORAGE_ACCOUNT_NAME} -g ${AKS_RESOURCE_GROUP} -o tsv`
+# Get the connection string as an environment variable, this is used when creating the Azure file share
+AZURE_STORAGE_CONNECTION_STRING=$(az storage account show-connection-string -n ${AKS_STORAGE_ACCOUNT_NAME} -g ${AKS_RESOURCE_GROUP} -o tsv)
 
 # Create the file share
 az storage share create \
@@ -31,14 +31,14 @@ az storage share create \
 # Get storage account key
 STORAGE_KEY=$(az storage account keys list --resource-group ${AKS_RESOURCE_GROUP} --account-name ${AKS_STORAGE_ACCOUNT_NAME} --query "[0].value" -o tsv)
 
-# Upload Files
+# Upload Files - change the source to the location of your dashboard files
 az storage file upload-batch \
 --source "../grafana/provisioning/dashboards" \
 --account-name ${AKS_STORAGE_ACCOUNT_NAME} \
 --account-key ${STORAGE_KEY} \
 --destination ${AKS_SHARE_NAME}
 
-# Create the Kubernetes Cluster
+# Create the Kubernetes cluster
 az aks create \
 --resource-group=${AKS_RESOURCE_GROUP} \
 --name=${AKS_CLUSTER_NAME} \
