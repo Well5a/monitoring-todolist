@@ -135,3 +135,24 @@ pg_class:
     - reltuples:
         usage: "COUNTER"
         description: "Number of rows in the table. This is only an estimate used by the planner. It is updated by VACUUM, ANALYZE, and a few DDL commands such as CREATE INDEX."
+
+
+#https://www.postgresql.org/docs/9.4/pgstatstatements.html
+pg_stat_statements:
+  query: "SELECT userid, dbid, queryid, query, calls, min_time, max_time, mean_time, total_time FROM pg_stat_statements(true) pg_stat_statements"
+  metrics:
+    - userid:
+        usage: "LABEL"
+        description: "OID of user who executed the statement"
+    - dbid:
+        usage: "LABEL"
+        description: "OID of database in which the statement was executed"
+    - queryid:
+        usage: "LABEL"
+        description: "Internal hash code, computed from the statement's parse tree"
+    - query:
+        usage: "LABEL"
+        description: "Text of a representative statement"
+    - total_time: 
+        usage: "GAUGE"
+        description: "Total time spent in the statement, in milliseconds"

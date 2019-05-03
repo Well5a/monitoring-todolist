@@ -84,6 +84,9 @@ spec:
           ports:
             - containerPort: 5432
           resources: {}
+          volumeMounts:
+            - name: init-db-volume
+              mountPath: /docker-entrypoint-initdb.d/
         - name: todo-db-exporter
           image: wrouesnel/postgres_exporter:latest
           env:
@@ -109,8 +112,10 @@ spec:
       volumes:
         - name: todo-db-exporter-volume
           configMap:
-            defaultMode: 420
             name: postgres-exporter-conf
+        - name: init-db-volume
+          configMap:
+            name: init-db-conf
 status: {}
 ---
 apiVersion: v1
@@ -137,6 +142,30 @@ spec:
       targetPort: 9187
 status:
   loadBalancer: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db-conf
+  namespace: todo-application
+  labels:
+    name: init-db-conf
+data:
+  init.sh: |-
+    #!/usr/bin/env bash
+    perl -pi -e "s/#shared_preload_libraries = ''/shared_preload_libraries = 'pg_stat_statements'/g" $PGDATA/postgresql.conf
+    #echo "shared_preload_libraries = 'pg_stat_statements'" >> $PGDATA/postgresql.conf
+    echo "pg_stat_statements.max = 10000" >> $PGDATA/postgresql.conf
+    echo "pg_stat_statements.track = all" >> $PGDATA/postgresql.conf
+
+    set -e
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+        CREATE USER todo01 WITH PASSWORD 'todo';
+        GRANT USAGE ON SCHEMA public TO todo01;
+        GRANT SELECT ON ALL TABLES IN SCHEMA public TO todo01;
+        GRANT todo TO todo01;
+        CREATE EXTENSION PG_STAT_STATEMENTS;
+    EOSQL
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -284,3 +313,22 @@ data:
         - reltuples:
             usage: "COUNTER"
             description: "Number of rows in the table. This is only an estimate used by the planner. It is updated by VACUUM, ANALYZE, and a few DDL commands such as CREATE INDEX."
+    
+    pg_stat_statements:
+      query: "SELECT userid, dbid, queryid, query, calls, min_time, max_time, mean_time, total_time FROM pg_stat_statements(true) pg_stat_statements"
+      metrics:
+        - userid:
+            usage: "LABEL"
+            description: "OID of user who executed the statement"
+        - dbid:
+            usage: "LABEL"
+            description: "OID of database in which the statement was executed"
+        - queryid:
+            usage: "LABEL"
+            description: "Internal hash code, computed from the statement's parse tree"
+        - query:
+            usage: "LABEL"
+            description: "Text of a representative statement"
+        - total_time: 
+            usage: "GAUGE"
+            description: "Total time spent in the statement, in milliseconds"
