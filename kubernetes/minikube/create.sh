@@ -8,6 +8,9 @@ kubectl config use-context minikube
 # Create the namespace
 kubectl create ns ${MK_NAMESPACE}
 
+# Create the application resources 
+kubectl apply -f ./kubernetes/
+
 # Create the configmaps from files
 kubectl create configmap postgres-exporter-conf \
 --namespace=${MK_NAMESPACE} \
@@ -16,6 +19,3 @@ kubectl create configmap postgres-exporter-conf \
 kubectl create configmap init-db-conf \
 --namespace=${MK_NAMESPACE} \
 --from-file=../../config/initdb.sh 
-
-# Create the application resources 
-kubectl apply -f ./kubernetes/

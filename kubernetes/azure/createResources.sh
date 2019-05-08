@@ -33,7 +33,7 @@ STORAGE_KEY=$(az storage account keys list --resource-group ${AKS_RESOURCE_GROUP
 
 # Upload Files - change the source to the location of your dashboard files
 az storage file upload-batch \
---source "../grafana/provisioning/dashboards" \
+--source "../../grafana/provisioning/dashboards" \
 --account-name ${AKS_STORAGE_ACCOUNT_NAME} \
 --account-key ${STORAGE_KEY} \
 --destination ${AKS_SHARE_NAME}
@@ -65,6 +65,9 @@ kubectl create secret generic todo-grafana-secret \
 --from-literal=azurestorageaccountname=${AKS_STORAGE_ACCOUNT_NAME} \
 --from-literal=azurestorageaccountkey=${STORAGE_KEY}
 
+# Create the application resources
+kubectl apply -f ./kubernetes/
+
 # Create the configmaps from files
 kubectl create configmap postgres-exporter-conf \
 --namespace=${AKS_NAMESPACE} \
@@ -73,9 +76,6 @@ kubectl create configmap postgres-exporter-conf \
 kubectl create configmap init-db-conf \
 --namespace=${AKS_NAMESPACE} \
 --from-file=../../config/initdb.sh 
-
-# Create the application resources
-kubectl apply -f ./kubernetes/
 
 # set the default namespace
 kubectl config set-context $(kubectl config current-context) --namespace=${AKS_NAMESPACE}
