@@ -14,5 +14,8 @@ target/
 # inspectit jar
 agent/*.jar
 
+# Grafana Plugins
+grafana/plugins/*
+
 # Branch switching
 generated/
