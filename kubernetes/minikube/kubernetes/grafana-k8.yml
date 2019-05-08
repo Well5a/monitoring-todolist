@@ -70,6 +70,8 @@ spec:
               mountPath: /usr/share/grafana/custom/dashboards
             - name: grafana-datasources-volume
               mountPath: /usr/share/grafana/custom/datasources
+            - name: grafana-plugin-volume
+              mountPath: /var/lib/grafana/plugins
       restartPolicy: Always
       volumes:
         - name: grafana-dashboards-volume
@@ -80,6 +82,10 @@ spec:
           configMap:
             defaultMode: 420
             name: grafana-datasources-conf
+        - name: grafana-plugin-volume
+          hostPath:   # hardcoded path
+            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/plugins
+            type: Directory
 status: {}
 ---
 apiVersion: v1

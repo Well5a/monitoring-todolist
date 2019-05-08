@@ -19,3 +19,5 @@ kubectl create configmap postgres-exporter-conf \
 kubectl create configmap init-db-conf \
 --namespace=${MK_NAMESPACE} \
 --from-file=../../config/initdb.sh 
+
+kubectl config set-context $(kubectl config current-context) --namespace=${MK_NAMESPACE}
