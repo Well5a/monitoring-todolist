@@ -77,9 +77,6 @@ spec:
             secretName: todo-grafana-secret
             shareName: monitoring-share
             readOnly: false
-          # hostPath:   # hardcoded path
-          #   path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
-          #   type: Directory
         - name: grafana-datasources-volume
           configMap:
             defaultMode: 420

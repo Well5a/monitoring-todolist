@@ -73,13 +73,9 @@ spec:
       restartPolicy: Always
       volumes:
         - name: grafana-dashboards-volume
-          azureFile:
-            secretName: todo-grafana-secret
-            shareName: monitoring-share
-            readOnly: false
-          # hostPath:   # hardcoded path
-          #   path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
-          #   type: Directory
+          hostPath:   # hardcoded path
+            path: /home/monitor/ownCloud/MonitoringCloud/monitoring-todolist/grafana/provisioning/dashboards/
+            type: Directory
         - name: grafana-datasources-volume
           configMap:
             defaultMode: 420
@@ -94,12 +90,13 @@ metadata:
   labels:
     app: grafana
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: grafana
   ports:
     - name: "grafana"
       port: 3000
       targetPort: 3000
+      nodePort: 31300
 status:
   loadBalancer: {}
