@@ -77,5 +77,9 @@ kubectl create configmap init-db-conf \
 --namespace=${AKS_NAMESPACE} \
 --from-file=../../config/initdb.sh 
 
+kubectl create configmap inspectit-conf \
+--namespace=${AKS_NAMESPACE} \
+--from-file=../../config/inspectit/inspectit-http-config.yml
+
 # set the default namespace
 kubectl config set-context $(kubectl config current-context) --namespace=${AKS_NAMESPACE}

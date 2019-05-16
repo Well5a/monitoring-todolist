@@ -30,6 +30,8 @@ spec:
           value: "true"
         - name: INSPECTIT_SERVICE_NAME
           value: todo-app
+        - name: INSPECTIT_CONFIG_FILE_BASED_PATH
+          value: /agentconfig
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://todo-service:5432/tododb
         - name: SPRING_DATASOURCE_PASSWORD
@@ -43,11 +45,16 @@ spec:
         volumeMounts:
           - name: todo-agent-volume
             mountPath: /agent
+          - name: todo-agent-config-volume
+            mountPath: /agentconfig
       restartPolicy: Always
       volumes:
         - name: todo-agent-volume
           persistentVolumeClaim:
             claimName: todo-agent-claim
+        - name: todo-agent-config-volume
+          configMap:
+            name: inspectit-conf
 status: {}
 ---
 apiVersion: extensions/v1beta1
