@@ -11,6 +11,8 @@ services:
   todo-db:
     image: postgres
     container_name: todo-db
+    volumes:
+      - ./config/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
     environment:
       POSTGRES_USER: todo
       POSTGRES_PASSWORD: todo
@@ -35,7 +37,7 @@ services:
 ## App
 
   todo-app:
-    image: todolist
+    image: well5a/todolist
     container_name: todo-app
     depends_on:
       - todo-db

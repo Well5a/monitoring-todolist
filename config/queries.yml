@@ -137,9 +137,9 @@ pg_class:
         description: "Number of rows in the table. This is only an estimate used by the planner. It is updated by VACUUM, ANALYZE, and a few DDL commands such as CREATE INDEX."
 
 
-#https://www.postgresql.org/docs/9.4/pgstatstatements.html
+#https://www.postgresql.org/docs/13/pgstatstatements.html
 pg_stat_statements:
-  query: "SELECT userid, dbid, queryid, query, calls, min_time, max_time, mean_time, total_time FROM pg_stat_statements(true) pg_stat_statements"
+  query: "SELECT userid, dbid, queryid, query, calls, min_exec_time, max_exec_time, mean_exec_time, total_exec_time FROM pg_stat_statements(true) pg_stat_statements"
   metrics:
     - userid:
         usage: "LABEL"
