@@ -72,7 +72,7 @@ The todo-service includes the app, the database and the database metric exporter
 
 The sub folders "azure" and "minikube" hold scripts to create the app on Azure Cloud and local Minikube installation respectively.
 
-The Folder "Kompose" holds Kubernetes config files generated with [Kompose](http://kompose.io/). 
+The Folder "Kompose" holds Kubernetes config files generated with [Kompose](http://kompose.io/).
 These files won't create a working application and were merely used as templates.
 
 ### Prerequisites for Azure
@@ -84,7 +84,7 @@ These files won't create a working application and were merely used as templates
 ### Deploying on Azure
 
 Simply execute the createResources.sh script.
-This automatically creates the necessary ressources on your Azure cloud like storage shares and the Kubernetes cluster. 
+This automatically creates the necessary ressources on your Azure cloud like storage shares and the Kubernetes cluster.
 Afterwards it deploys the app which will then be reachable on the external endpoints of the Kubernetes services.
 Because the script also sets this cluster as the default instance of your local kubectl installation you can simply execute `kubectl get services` to get a list of the Kubernetes services and their available endpoints.
 
@@ -110,8 +110,10 @@ The following list shows the Kubernetes config files that need changes and how t
 For testing or development purposes a local Kubernetes instance like [Minikube](https://kubernetes.io/docs/setup/minikube/) is often useful.
 
 You need a working Minikube installation, after that execute the create.sh script to create the Kubernetes resources on the cluster.
-The app will become available on the internal-IP of the cluster node (get it with `kubectl get node -o wide`)
+The app will become available on the internal-IP of the cluster node (get it with `kubectl get node -o wide`).
 
-With Minikube you can access a dashboard that shows the availability of your cluster and the ressources within.
+For access to services of type LoadBalancer with Minikube you have to run `minikube tunnel` in a seperate command line window.
+Then the External IPs will become available.
+
+With Minikube you can access a dashboard that shows the availability of your cluster and the resources within.
 Command `kubectl proxy` provides this dashboard at localhost:8001.
-

@@ -140,7 +140,7 @@ metadata:
   name: todo-service
   namespace: todo-application
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     service: todo
   ports:
