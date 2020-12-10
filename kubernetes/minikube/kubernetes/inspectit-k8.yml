@@ -11,7 +11,7 @@ spec:
     requests:
       storage: 3Gi
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-inspectit
@@ -20,12 +20,15 @@ metadata:
     app: todo-inspectit
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: todo-inspectit
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: todo-inspectit
+        app: todo-inspectit
     spec:
       containers:
         - name: todo-inspectit

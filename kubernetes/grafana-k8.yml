@@ -63,7 +63,7 @@ spec:
             - name: GF_SECURITY_ADMIN_USER
               value: admin
             - name: GF_INSTALL_PLUGINS
-              value: https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/download/v0.2/novatec-service-dependency-graph-panel.zip;novatec-servicegraph-panel
+              value: https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/download/v3.0.2/novatec-sdg-panel.zip;novatec-servicegraph-panel
           ports:
             - containerPort: 3000
           resources: {}

@@ -71,6 +71,7 @@ services:
     container_name: todo-grafana
     volumes:
       - ./grafana/provisioning:/usr/share/grafana/custom/
+      - ./grafana/plugins:/usr/share/grafana/custom/plugins
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=todo

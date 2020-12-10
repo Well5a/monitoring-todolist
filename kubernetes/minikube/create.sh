@@ -20,4 +20,8 @@ kubectl create configmap init-db-conf \
 --namespace=${MK_NAMESPACE} \
 --from-file=../../config/initdb.sh 
 
+kubectl create configmap inspectit-conf \
+--namespace=${MK_NAMESPACE} \
+--from-file=../../config/inspectit/inspectit-http-config.yml 
+
 kubectl config set-context $(kubectl config current-context) --namespace=${MK_NAMESPACE}

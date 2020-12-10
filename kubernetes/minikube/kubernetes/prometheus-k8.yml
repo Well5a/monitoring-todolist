@@ -1,4 +1,4 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: prometheus
@@ -20,7 +20,7 @@ rules:
   - nonResourceURLs: ["/metrics"]
     verbs: ["get"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus
@@ -164,13 +164,16 @@ data:
           action: replace
           target_label: kubernetes_name
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-deployment
   namespace: todo-application
 spec:
-  replicas: 1
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: prometheus-server
   template:
     metadata:
       labels:
